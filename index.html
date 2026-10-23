@@ -1,0 +1,212 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NumiPrism · Prototype</title><style>
+:root{color-scheme:dark;--bg:#081522;--panel:#12263a;--panel2:#1a3249;--gold:#e2bc72;--txt:#eef3f8;--muted:#a8bacb;--line:#31475a}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -20%,#284763,#081522 60%);font:15px system-ui,-apple-system,sans-serif;color:var(--txt);min-height:100vh}button,input,select,textarea{font:inherit}button{cursor:pointer}header{padding:22px 18px 14px;text-align:center;border-bottom:1px solid var(--line)}.mark{width:70px;height:70px;margin:auto;display:grid;place-items:center;border:3px solid var(--gold);border-radius:18px;background:radial-gradient(circle,#24618a,#0b1927 65%);box-shadow:0 0 26px #e2bc7240;color:var(--gold);font-size:37px}.brand{font:700 38px Georgia,serif;letter-spacing:-1px;color:var(--gold);text-shadow:1px 2px 0 #77572e,2px 4px 8px #000}.tag{color:#e7d8bd;font:italic 13px Georgia,serif}main{max-width:960px;margin:auto;padding:20px 16px 110px}.page{display:none}.page.active{display:block}h1{font:600 26px Georgia,serif;color:#f0d18d}h2{font-size:19px;color:var(--gold)}p{line-height:1.5;color:var(--muted)}.hero{background:linear-gradient(135deg,#1c3951,#101e2c);padding:22px;border:1px solid #755f3a;border-radius:18px}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}.card{background:var(--panel);border:1px solid var(--line);padding:17px;border-radius:15px;text-align:left;color:var(--txt)}.card b{display:block;color:var(--gold);font-size:17px;margin:7px 0}.card small{color:var(--muted)}.btn{border:1px solid #aa864b;border-radius:11px;padding:11px 15px;background:linear-gradient(#e8c983,#c79a51);color:#17202b;font-weight:700}.ghost{background:var(--panel2);color:var(--txt);border-color:var(--line)}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.field{display:grid;gap:5px;margin:10px 0;color:var(--muted)}input,select,textarea{width:100%;padding:12px;border:1px solid #496075;border-radius:10px;background:#091929;color:white}textarea{min-height:85px}.item{display:flex;gap:12px;padding:12px;border:1px solid var(--line);border-radius:12px;margin:10px 0;background:var(--panel)}.thumb{width:76px;height:76px;object-fit:cover;border-radius:9px;background:#20384e}.muted{color:var(--muted);font-size:13px}.pill{display:inline-block;border:1px solid #856e43;border-radius:99px;color:var(--gold);padding:3px 8px;font-size:11px}.notice{border-left:3px solid var(--gold);padding:10px 12px;background:#1b3041;color:#d4dce5;border-radius:7px;margin:12px 0}.nav{position:fixed;bottom:0;left:0;right:0;background:#091826f5;display:flex;justify-content:center;border-top:1px solid #40556a;z-index:10}.nav button{background:transparent;color:#c3d0dd;border:0;padding:11px 7px;flex:1;max-width:155px;font-size:11px}.nav button.active{color:var(--gold);border-top:3px solid var(--gold)}.nav span{display:block;font-size:21px}.split{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:500px){.brand{font-size:32px}.cards{gap:8px}.card{padding:13px}.split{grid-template-columns:1fr}}.preview{max-width:100%;max-height:190px;border-radius:12px;display:none}.empty{padding:20px;text-align:center;color:var(--muted);border:1px dashed #50647a;border-radius:12px}.error{color:#ffb5a9}
+.detailOverlay{position:fixed;inset:0;background:#030a11df;z-index:30;display:none;overflow-y:auto;padding:18px}.detailOverlay.open{display:block}.detailPanel{max-width:680px;margin:15px auto 50px;background:#11283c;border:1px solid #b68e51;border-radius:18px;padding:20px}.detailPhotos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:15px 0}.detailPhotos img{width:100%;max-height:330px;object-fit:contain;background:#081522;border-radius:12px}.detailField{border-bottom:1px solid #31475a;padding:10px 0;overflow-wrap:anywhere}.clickItem{width:100%;text-align:left;color:inherit;cursor:pointer}.clickItem:focus-visible{outline:3px solid var(--gold)}.detailClose{float:right}.itemBody{flex:1;min-width:0}</style></head><body><header><div class="mark">◉</div><div class="brand">NumiPrism</div><div class="tag">Discover what others overlook.</div></header><main>
+<section id="home" class="page active"><div class="hero"><span class="pill">WORKING PROTOTYPE · V1.2</span><h1>Your collection, clearly seen.</h1><p>Photograph, catalog, and explore U.S. coins, currency, and collectible errors.</p><button class="btn" onclick="go('scan')">＋ Add an item</button></div><div class="cards"><button class="card" onclick="go('scan')">📷<b>Scan & Identify</b><small>Capture and record an item</small></button><button class="card" onclick="go('errors')">⌕<b>Error Encyclopedia</b><small>Search error categories</small></button><button class="card" onclick="go('collection')">◉<b>My Collection</b><small>General coins & currency</small></button><button class="card" onclick="go('collectibles')">✦<b>My Collectibles</b><small>Errors & valuable items</small></button></div><div id="stats" class="notice"></div></section>
+<section id="scan" class="page"><h1>Scan & Identify</h1><p>Take front and back photographs. NumiPrism saves both immediately, then attempts identification and opens the appropriate collection even if recognition fails.</p><div class="notice">Take BOTH photos: identification starts automatically after both sides are captured; failures will not block saving or navigation. No typing or Save button. Photo capture automatically runs OCR and free on-device visual matching. First use downloads a large AI model and requires internet; it can take 60 seconds or more. OCR and AI errors are recorded in item notes. Results are suggestions, not authentication. The app does not yet reliably detect errors or appraise values, so uncertain items remain in My Collection.</div><div class="row"><button class="btn ghost" type="button" onclick="newScan()">＋ Start a different item</button></div><form id="entryForm"><div class="split"><label class="field">Front photo<input id="front" type="file" accept="image/*" capture="environment"><img id="frontPreview" class="preview" alt="Front preview"></label><label class="field">Back photo<input id="back" type="file" accept="image/*" capture="environment"><img id="backPreview" class="preview" alt="Back preview"></label></div><div class="notice" id="scanResult" aria-live="polite">Take the front and back photos. Analysis starts automatically; the app waits for both before saving and navigating.</div><details><summary class="muted">Optional corrections (not required to save)</summary><label class="field">Item name / description<input id="itemName" placeholder="e.g., 1943-D Lincoln steel cent"></label><div class="split"><label class="field">Year<input id="year" placeholder="1943"></label><label class="field">Mint<input id="mint" placeholder="D, S, P, none..."></label></div><div class="split"><label class="field">Type<select id="type"><option>Coin</option><option>Paper currency</option><option>Other collectible</option></select></label><label class="field">Save to<select id="bucket"><option value="collection">My Collection</option><option value="collectibles">My Collectibles</option></select></label></div><label class="field">Possible error / variety<input id="error" placeholder="Optional; unverified until reviewed"></label><label class="field">Notes<textarea id="notes" placeholder="Condition, certification, provenance, etc."></textarea></label><label class="field">Estimated value (optional, USD)<input id="value" type="number" min="0" step="0.01" placeholder="Do not confuse estimate with sold price"></label></details><span class="muted" id="saveStatus">Both photos are required before automatic saving. Unverified errors or values are never assumed.</span></form></section>
+<section id="errors" class="page"><h1>Error Encyclopedia</h1><p>Starter taxonomy for research and filtering. This is not yet the complete verified error database; no auction values are fabricated.</p><label class="field">Search errors<input id="errorSearch" placeholder="Try doubled die, off-center, serial..." oninput="renderErrors()"></label><div id="errorList"></div><div class="notice">Next database phase: documented examples by denomination, date, mint, images, mintage, error population, auction sale, sale date, grade, and source.</div></section>
+<section id="collection" class="page"><h1>My Collection</h1><p>General coins and currency. Records are private to this browser in this prototype.</p><div class="row"><button class="btn" onclick="addTo('collection')">＋ Add item</button><button class="btn ghost" onclick="exportData()">Export JSON backup</button></div><label class="field">Search collection<input id="collectionSearch" oninput="renderItems('collection')" placeholder="Search year, mint, description..."></label><div id="collectionList"></div></section>
+<section id="collectibles" class="page"><h1>My Collectibles</h1><p>Error coins, valuable currency, rarities, and other collectibles.</p><div class="row"><button class="btn" onclick="addTo('collectibles')">＋ Add item</button><button class="btn ghost" onclick="exportData()">Export JSON backup</button></div><label class="field">Search collectibles<input id="collectiblesSearch" oninput="renderItems('collectibles')" placeholder="Search entries..."></label><div id="collectiblesList"></div></section>
+</main><div id="detailOverlay" class="detailOverlay" role="dialog" aria-modal="true" aria-label="Item information"><div id="detailPanel" class="detailPanel"></div></div><nav class="nav"><button data-page="home" class="active" onclick="go('home')"><span>⌂</span>Home</button><button data-page="scan" onclick="go('scan')"><span>◎</span>Scan</button><button data-page="errors" onclick="go('errors')"><span>⌕</span>Errors</button><button data-page="collection" onclick="go('collection')"><span>◉</span>Collection</button><button data-page="collectibles" onclick="go('collectibles')"><span>✦</span>Collectibles</button></nav><script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js" defer></script><script>
+
+// Curated, offline, denomination/design-level reference data. Never fabricate date/mint mintage.
+const COIN_REFERENCE=[
+ {key:'Lincoln wheat cent',rx:/lincoln wheat cent|wheat cent/i,range:[1909,1958],den:'1 cent',diam:'19.05 mm',weight:'3.11 g (1909–1942, 1944–1958); 2.70 g (1943 steel)',metal:'95% copper alloy except 1943 zinc-coated steel; some rare transitional exceptions',errors:'Repunched mintmarks, doubled dies, off-center strikes, clips, die breaks; date/mint-specific attribution required'},
+ {key:'Lincoln memorial cent',rx:/lincoln memorial cent|memorial cent/i,range:[1959,2008],den:'1 cent',diam:'19.05 mm',weight:'3.11 g (1959–1982 copper); 2.50 g (1982–2008 zinc core)',metal:'Copper alloy through 1982; copper-plated zinc introduced in 1982 (both varieties exist)',errors:'Doubled dies, wide/close AM varieties on certain dates, off-center strikes; verify variety'},
+ {key:'Lincoln shield cent',rx:/lincoln shield cent|shield cent/i,range:[2010,2026],den:'1 cent',diam:'19.05 mm',weight:'2.50 g',metal:'Copper-plated zinc',errors:'Die chips, doubled dies, off-center strikes; verify individually'},
+ {key:'Indian head cent',rx:/indian head cent/i,range:[1859,1909],den:'1 cent',diam:'19.05 mm',weight:'4.67 g (1859–1864 copper-nickel); 3.11 g (1864–1909 bronze)',metal:'Copper-nickel early; bronze later; transition in 1864',errors:'Repunched dates, doubled dies, die breaks; specialist attribution needed'},
+ {key:'Buffalo nickel',rx:/buffalo nickel/i,range:[1913,1938],den:'5 cents',diam:'21.21 mm',weight:'5.00 g',metal:'75% copper, 25% nickel',errors:'1918/7-D overdate, 1937-D three-legged variety and others; not automatically confirmed'},
+ {key:'Jefferson nickel',rx:/jefferson nickel/i,range:[1938,2026],den:'5 cents',diam:'21.21 mm',weight:'5.00 g',metal:'75% copper, 25% nickel generally; 1942–1945 wartime issues are 35% silver',errors:'Doubled dies, repunched mintmarks, die cracks; attribution needed'},
+ {key:'Mercury dime',rx:/mercury dime/i,range:[1916,1945],den:'10 cents',diam:'17.91 mm',weight:'2.50 g',metal:'90% silver, 10% copper',errors:'1942/1 and 1942/1-D overdates; other die varieties and mint errors'},
+ {key:'Roosevelt dime',rx:/roosevelt dime/i,range:[1946,2026],den:'10 cents',diam:'17.91 mm',weight:'2.50 g (silver issues); 2.268 g (clad issues)',metal:'90% silver through 1964; copper-nickel clad from 1965 for standard circulation',errors:'Missing mintmarks on specific proofs, off-center strikes, doubled dies; verify'},
+ {key:'Washington quarter',rx:/washington quarter|state quarter/i,range:[1932,2026],den:'25 cents',diam:'24.26 mm',weight:'6.25 g (silver); 5.67 g (clad)',metal:'90% silver through 1964; copper-nickel clad from 1965 for standard circulation',errors:'Doubled dies, wrong planchets, off-center strikes, some state-quarter die varieties'},
+ {key:'Standing Liberty quarter',rx:/standing liberty quarter/i,range:[1916,1930],den:'25 cents',diam:'24.26 mm',weight:'6.25 g',metal:'90% silver, 10% copper',errors:'Doubled dies, off-center strikes, die varieties; verify'},
+ {key:'Kennedy half dollar',rx:/kennedy half dollar/i,range:[1964,2026],den:'50 cents',diam:'30.61 mm',weight:'12.50 g (1964); 11.50 g (1965–1970); 11.34 g (standard clad since 1971)',metal:'90% silver (1964); 40% silver (1965–1970); standard clad from 1971; special collector issues vary',errors:'Accented hair proof variety, doubled dies, mint errors; verify'},
+ {key:'Franklin half dollar',rx:/franklin half dollar/i,range:[1948,1963],den:'50 cents',diam:'30.61 mm',weight:'12.50 g',metal:'90% silver, 10% copper',errors:'Doubled dies, off-center strikes, die varieties'},
+ {key:'Walking Liberty half dollar',rx:/walking liberty half dollar/i,range:[1916,1947],den:'50 cents',diam:'30.61 mm',weight:'12.50 g',metal:'90% silver, 10% copper',errors:'Repunched mintmarks, doubled dies, strike errors'},
+ {key:'Morgan silver dollar',rx:/morgan silver dollar/i,range:[1878,1921],den:'1 dollar',diam:'38.10 mm',weight:'26.73 g',metal:'90% silver, 10% copper (classic circulation issues)',errors:'VAM die varieties, overdates, doubled dies, mint errors'},
+ {key:'Peace silver dollar',rx:/peace silver dollar/i,range:[1921,1935],den:'1 dollar',diam:'38.10 mm',weight:'26.73 g',metal:'90% silver, 10% copper (classic circulation issues)',errors:'Die varieties, doubling, mint errors'},
+ {key:'Susan B Anthony dollar',rx:/susan b anthony dollar/i,range:[1979,1999],den:'1 dollar',diam:'26.50 mm',weight:'8.10 g',metal:'Copper-nickel clad',errors:'1979-P wide rim and 1979-S proof mintmark varieties; verify'},
+ {key:'Sacagawea golden dollar',rx:/sacagawea golden dollar/i,range:[2000,2026],den:'1 dollar',diam:'26.50 mm',weight:'8.10 g',metal:'Manganese-brass clad over copper core',errors:'Wounded Eagle 2000-P die variety; verify'},
+ {key:'Presidential dollar',rx:/presidential dollar/i,range:[2007,2020],den:'1 dollar',diam:'26.50 mm',weight:'8.10 g',metal:'Manganese-brass clad over copper core',errors:'Missing or doubled edge lettering on some issues; verify'}
+];
+function referenceFor(name,year){
+ const r=COIN_REFERENCE.find(x=>x.rx.test(name||''));if(!r)return null;
+ const y=Number(year);if(y&&(y<r.range[0]||y>r.range[1]))return {warning:'Recognized design and year conflict. Reference withheld pending verification.',design:r.key};
+ return {design:r.key,denomination:r.den,years:r.range.join('–'),diameter:r.diam,weight:r.weight,composition:r.metal,possibleErrors:r.errors,mintage:'Exact year-and-mint mintage not included in offline dataset; not verified',auction:'No verified auction transaction linked',population:'Not established',source:'General U.S. Mint specifications and historical design references; independently verify date/mint-specific data',referenceUrl:'https://www.usmint.gov/learn/coin-and-medal-programs/coin-specifications',note:'Reference specifications describe typical circulation issues; special proofs and transitional issues may differ.'};
+}
+function referenceMarkup(x){const r=x.reference||referenceFor(x.name,x.year);if(!r)return '<div class="notice">No verified offline reference match. Specifications, mintage, and sales remain unknown.</div>';if(r.warning)return `<div class="notice">${safe(r.warning)}</div>`;return `<h2>Automatically matched reference</h2>${field('Design',r.design)}${field('Denomination',r.denomination)}${field('Design date range',r.years)}${field('Diameter',r.diameter)}${field('Weight by issue',r.weight)}${field('Composition by issue',r.composition)}${field('Potential errors / varieties — NOT detected',r.possibleErrors)}${field('Exact year + mint mintage',r.mintage)}${field('Known error population',r.population)}${field('Verified public auction sale',r.auction)}<div class="notice">${safe(r.note)} <a style="color:var(--gold)" target="_blank" rel="noopener noreferrer" href="${r.referenceUrl}">U.S. Mint coin specifications ↗</a></div>`}
+
+const KEY='numiprism_proto_v1';let items=[];try{items=JSON.parse(localStorage.getItem(KEY)||'[]')}catch{};const $=id=>document.getElementById(id);const categories=[['Off-center strike','Coin','Part of the design is missing because the planchet was not centered under the dies.'],['Broadstrike','Coin','A coin struck without proper collar containment.'],['Clipped planchet','Coin','Missing metal from a blank before striking.'],['Wrong planchet','Coin','A design struck on a planchet intended for another denomination or composition.'],['Double strike','Coin','A coin struck more than once, sometimes with shifted alignment.'],['Brockage','Coin','Mirror-image impression caused by a previously struck coin stuck to a die.'],['Die cap','Coin','Coin becomes attached to a die and forms a cap through subsequent strikes.'],['Doubled die','Die variety','Hub doubling transferred to the die; not the same as machine doubling.'],['Die crack / cud','Coin','Raised lines or rim-connected blobs from a cracked or broken die.'],['Rotated die','Coin','Unusual obverse/reverse alignment relative to the intended orientation.'],['Missing clad layer','Coin','A clad coin missing one outer metal layer.'],['Mule','Coin','Mismatched obverse and reverse dies not intended to be paired.'],['Inverted overprint','Currency','Treasury seal and serial-number overprint appears inverted.'],['Misaligned printing','Currency','Printed design or one pass is displaced from intended alignment.'],['Insufficient inking','Currency','Partial or weak print caused by an inking issue.'],['Foldover / gutter fold','Currency','Paper fold during printing causes missing or misplaced imagery.'],['Mismatched serial numbers','Currency','Serial numbers on one note do not match.'],['Cutting error','Currency','Sheet cutting is mispositioned, sometimes exposing portions of neighboring notes.']];function safe(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function go(p){document.querySelectorAll('.page').forEach(e=>e.classList.toggle('active',e.id===p));document.querySelectorAll('.nav button').forEach(e=>e.classList.toggle('active',e.dataset.page===p));render();scrollTo(0,0)}function addTo(p){$('bucket').value=p;go('scan')}function render(){renderItems('collection');renderItems('collectibles');renderErrors();$('stats').textContent=`${items.filter(x=>x.bucket==='collection').length} general items · ${items.filter(x=>x.bucket==='collectibles').length} collectible items · Browser-local prototype`}
+function renderErrors(){let q=$('errorSearch').value.toLowerCase();$('errorList').innerHTML=categories.map((x,i)=>({...{name:x[0],kind:x[1],description:x[2]},i})).filter(x=>[x.name,x.kind,x.description].join(' ').toLowerCase().includes(q)).map(x=>`<button type="button" class="item clickItem" onclick="openError(${x.i})"><div><span class="pill">${safe(x.kind)}</span><h2>${safe(x.name)} ↗</h2><p>${safe(x.description)}</p><small class="muted">Tap for identification notes · documented examples pending</small></div></button>`).join('')||'<div class="empty">No matching error category</div>'}
+function renderItems(p){let q=$(p+'Search').value.toLowerCase();let filtered=items.filter(x=>x.bucket===p&&[x.name,x.year,x.mint,x.type,x.error,x.notes].join(' ').toLowerCase().includes(q));$(p+'List').innerHTML=filtered.map(x=>`<article id="item-${safe(x.id)}" class="item">${x.front?`<img class="thumb" src="${x.front}" alt="Item front">`:'<div class="thumb" style="display:grid;place-items:center">◉</div>'}<div class="itemBody"><button type="button" class="clickItem" style="border:0;background:transparent;padding:0" onclick="openItem('${safe(x.id)}')"><b style="color:var(--gold)">${safe(x.name)} ↗</b><div class="muted">${safe(x.id)} · ${safe(x.year||'Year unknown')} · Mint: ${safe(x.mint||'unknown')} · ${safe(x.type)}</div>${x.error?`<div class="pill">Possible: ${safe(x.error)}</div>`:''}${x.value?`<div class="muted">User estimate: $${Number(x.value).toFixed(2)}</div>`:''}<small class="muted">Tap to view full details and both photos</small></button><div class="row" style="margin-top:8px"><button class="btn ghost" onclick="moveItem('${safe(x.id)}')">Move</button><button class="btn ghost" onclick="deleteItem('${safe(x.id)}')">Delete</button></div></div></article>`).join('')||'<div class="empty">No items yet. Add your first item using the camera or file upload.</div>'}
+function field(label,value){return `<div class="detailField"><div class="muted">${safe(label)}</div><div>${safe(value||'Not recorded')}</div></div>`}
+function showDetail(html){$('detailPanel').innerHTML=`<button class="btn ghost detailClose" onclick="closeDetail()">✕ Close</button>`+html;$('detailOverlay').classList.add('open');$('detailOverlay').scrollTop=0;document.body.style.overflow='hidden'}
+function closeDetail(){$('detailOverlay').classList.remove('open');document.body.style.overflow=''}
+$('detailOverlay').addEventListener('click',e=>{if(e.target===$('detailOverlay'))closeDetail()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDetail()});
+function openItem(id){let x=items.find(x=>x.id===id);if(!x)return;showDetail(`<h1>${safe(x.name)}</h1><span class="pill">${x.bucket==='collection'?'My Collection':'My Collectibles'}</span><div class="detailPhotos">${x.front?`<div><div class="muted">Front</div><img src="${x.front}" alt="Front photograph"></div>`:'<div class="empty">No front photo</div>'}${x.back?`<div><div class="muted">Back</div><img src="${x.back}" alt="Back photograph"></div>`:'<div class="empty">No back photo</div>'}</div>${field('Inventory ID',x.id)}${field('Type',x.type)}${field('Year',x.year)}${field('Mint',x.mint)}${field('Possible error / variety',x.error)}${field('Notes / photo recognition results',x.notes)}${field('User-estimated value',x.value?'$'+Number(x.value).toFixed(2):'Not recorded')}${referenceMarkup(x)}${field('Date added',x.created?new Date(x.created).toLocaleString():'Unknown')}<div class="notice">Identification and errors are unverified. This prototype does not retrieve auction sales or authenticate items.</div><div class="row"><button class="btn" onclick="editItem('${safe(x.id)}')">✎ Edit this item</button><button class="btn ghost" onclick="closeDetail()">Back to list</button></div>`)}
+function openError(i){let x=categories[i];if(!x)return;showDetail(`<h1>${safe(x[0])}</h1><span class="pill">${safe(x[1])}</span><h2>What this error means</h2><p>${safe(x[2])}</p>${field('Error category',x[1])}${field('Documented examples','Not yet populated')}${field('Known error population','Not established in this starter encyclopedia')}${field('Most recent verified auction sale','Not yet researched')}${field('Reference photograph','Not yet added')}<div class="notice">This is an error-type definition, not a confirmed error on a particular coin or note. Verified photographs, mintages, and auction records will be added as the encyclopedia grows.</div><button class="btn" onclick="closeDetail()">Back to encyclopedia</button>`)}
+let editingId=null;
+function editItem(id){
+ const x=items.find(v=>v.id===id);if(!x)return;
+ editingId=id;closeDetail();go('scan');
+ $('itemName').value=x.name||'';$('year').value=x.year||'';$('mint').value=x.mint||'';
+ $('type').value=x.type||'Coin';$('bucket').value=x.bucket||'collection';
+ $('error').value=x.error||'';$('notes').value=x.notes||'';$('value').value=x.value||'';
+ for(const side of ['front','back']){const im=$(side+'Preview');im.src=x[side]||'';im.style.display=x[side]?'block':'none'}
+ activePhotoId=id;$('scanResult').textContent='Editing '+id+'. Existing photos are retained unless you take new ones. Save to update this entry.';
+ document.querySelector('#entryForm button[type="submit"]').textContent='Update item';
+}
+function newScan(){scanSequence++;activePhotoId=null;editingId=null;$('entryForm').reset();for(const k of ['front','back']){$(k+'Preview').src='';$(k+'Preview').style.display='none'}$('scanResult').textContent='Ready for a new item. Take front AND back photographs; I will wait for both.';}
+function classifyScan(){
+ // Only promote an item when the record contains a specific explicitly identified error
+ // or a sourced/confirmed value. OCR and CLIP guesses are NOT evidence of either.
+ const error=$('error').value.trim();
+ const price=Number($('value').value);
+ const confirmedError=error && !/^(possible|suspected|unverified|unknown|none|no error)/i.test(error);
+ const highValue=$('value').value!=='' && Number.isFinite(price) && price>=100;
+ return (confirmedError||highValue)?'collectibles':'collection';
+}
+async function savePhotoScan(navigate=true){
+ const front=$('frontPreview').style.display==='block'?$('frontPreview').src:'';
+ const back=$('backPreview').style.display==='block'?$('backPreview').src:'';
+ if(!front||!back)return;
+ let existing=items.find(x=>x.id===(activePhotoId||editingId));
+ const id=existing?.id||'NP-'+String(Math.max(0,...items.map(x=>Number(x.id.split('-')[1])||0))+1).padStart(5,'0');
+ const x={id,name:$('itemName').value.trim()||'Unidentified item — photo review needed',year:$('year').value.trim(),mint:$('mint').value.trim(),type:$('type').value,bucket:classifyScan(),error:$('error').value.trim(),notes:$('notes').value.trim(),value:$('value').value,front:front||existing?.front||'',back:back||existing?.back||'',reference:referenceFor($('itemName').value.trim(),$('year').value.trim()),created:existing?.created||new Date().toISOString()};
+ if(existing)items[items.indexOf(existing)]=x;else items.push(x);
+ if(!persist()){if(existing)items[items.indexOf(x)]=existing;else items.pop();return}
+ activePhotoId=id;editingId=id;render();$('saveStatus').textContent='Automatically saved as '+id;
+ if(navigate){$('scanResult').textContent+=' Both photos saved as '+id+'. Opening '+(x.bucket==='collectibles'?'My Collectibles':'My Collection')+'…';go(x.bucket);const target=document.getElementById('item-'+id);if(target)target.scrollIntoView({block:'center'});}
+}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(items));return true}catch(e){alert('Browser storage is full or unavailable. Export your collection backup and use smaller photos.');return false}}
+function moveItem(id){let x=items.find(x=>x.id===id);if(!x)return;x.bucket=x.bucket==='collection'?'collectibles':'collection';persist();render()}function deleteItem(id){if(!confirm('Delete this entry from this browser? Export a backup first if needed.'))return;items=items.filter(x=>x.id!==id);persist();render()}
+function fileData(file){return new Promise((resolve,reject)=>{if(!file)return resolve('');const img=new Image(),reader=new FileReader();reader.onload=()=>{img.onload=()=>{const scale=Math.min(1,900/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.round(img.width*scale);c.height=Math.round(img.height*scale);c.getContext('2d').drawImage(img,0,0,c.width,c.height);resolve(c.toDataURL('image/jpeg',.78))};img.onerror=reject;img.src=reader.result};reader.onerror=reject;reader.readAsDataURL(file)})}
+let scanSequence=0;let activePhotoId=null;
+function withDeadline(p,ms,label){return Promise.race([Promise.resolve(p),new Promise((_,reject)=>setTimeout(()=>reject(new Error(label+' timed out')),ms))])}
+
+for(const k of ['front','back'])$(k).addEventListener('change',async e=>{
+ const seq=++scanSequence, file=e.target.files[0];if(!file)return;
+ try{
+  const d=await fileData(file);if(seq!==scanSequence)return;
+  $(k+'Preview').src=d;$(k+'Preview').style.display='block';
+  if($('frontPreview').style.display!=='block'||$('backPreview').style.display!=='block'){
+   $('scanResult').textContent='First photo captured. Take the other side; no manual entry needed.';return;
+  }
+  $('scanResult').textContent='Both photographs captured. Saving safely before identification…';
+  // Save immediately, then update the same record with recognition details.
+  await savePhotoScan(false);
+  if(seq!==scanSequence)return;
+  $('scanResult').textContent='Photographs saved. Identifying coin. First-time AI model loading can take a minute…';
+  await autoFillPhotos(seq);
+  if(seq!==scanSequence)return;
+  await savePhotoScan(true);
+ }catch(err){
+  $('scanResult').textContent='Photo processing problem: '+(err?.message||String(err));
+  if($('frontPreview').style.display==='block'&&$('backPreview').style.display==='block'){
+   try{await savePhotoScan(true)}catch(_){}
+  }
+ }
+});
+$('entryForm').addEventListener('submit',async e=>{
+ e.preventDefault();
+ const front=$('front').files[0]?await fileData($('front').files[0]):(editingId?items.find(x=>x.id===editingId)?.front:'')||'';
+ const back=$('back').files[0]?await fileData($('back').files[0]):(editingId?items.find(x=>x.id===editingId)?.back:'')||'';
+ const existing=editingId?items.find(x=>x.id===editingId):null;
+ let id=existing?.id||'NP-'+String(Math.max(0,...items.map(x=>Number(x.id.split('-')[1])||0))+1).padStart(5,'0');
+ let x={id,name:$('itemName').value.trim(),year:$('year').value.trim(),mint:$('mint').value.trim(),type:$('type').value,bucket:$('bucket').value,error:$('error').value.trim(),notes:$('notes').value.trim(),value:$('value').value,front,back,reference:referenceFor($('itemName').value.trim(),$('year').value.trim()),created:existing?.created||new Date().toISOString()};
+ if(existing){items[items.indexOf(existing)]=x}else items.push(x);
+ if(!persist()){if(existing)items[items.indexOf(x)]=existing;else items.pop();return}
+ editingId=null;document.querySelector('#entryForm button[type="submit"]').textContent='Save item';
+ $('entryForm').reset();for(const k of ['front','back']){$(k+'Preview').src='';$(k+'Preview').style.display='none'}
+ $('scanResult').textContent='Take a photo to start automatic text recognition.';activePhotoId=null;go(x.bucket);
+});
+const VISION_LABELS=[
+ 'a close up photograph of a Lincoln wheat cent coin',
+ 'a close up photograph of a Lincoln memorial cent coin',
+ 'a close up photograph of a Lincoln shield cent coin',
+ 'a close up photograph of an Indian head cent coin',
+ 'a close up photograph of a Buffalo nickel coin',
+ 'a close up photograph of a Jefferson nickel coin',
+ 'a close up photograph of a Mercury dime coin',
+ 'a close up photograph of a Roosevelt dime coin',
+ 'a close up photograph of a Barber dime coin',
+ 'a close up photograph of a Washington quarter coin',
+ 'a close up photograph of a Standing Liberty quarter coin',
+ 'a close up photograph of a State quarter coin',
+ 'a close up photograph of a Kennedy half dollar coin',
+ 'a close up photograph of a Franklin half dollar coin',
+ 'a close up photograph of a Walking Liberty half dollar coin',
+ 'a close up photograph of a Morgan silver dollar coin',
+ 'a close up photograph of a Peace silver dollar coin',
+ 'a close up photograph of a Sacagawea golden dollar coin',
+ 'a close up photograph of a Presidential dollar coin',
+ 'a close up photograph of a Susan B Anthony dollar coin',
+ 'a close up photograph of a United States paper dollar banknote',
+ 'a close up photograph of a United States paper currency banknote',
+ 'a close up photograph of a foreign coin',
+ 'a close up photograph of a medal or token'
+];
+let visionPromise;
+async function getVision(){
+ if(!visionPromise)visionPromise=(async()=>{
+  const {pipeline}=await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1');
+  return pipeline('zero-shot-image-classification','Xenova/clip-vit-base-patch32',{device:'wasm'});
+ })().catch(e=>{visionPromise=null;throw e});
+ return visionPromise;
+}
+async function visualGuess(photo){
+ const classifier=await getVision();
+ const result=await classifier(photo,VISION_LABELS);
+ return (Array.isArray(result)?result:[]).slice(0,3).map(x=>({name:x.label.replace('a close up photograph of a ','').replace(/ coin$/,'').replace(/ banknote$/,' banknote'),score:x.score}));
+}
+async function autoFillPhotos(){
+ const status=$('scanResult');
+ const files=[$('front').files[0],$('back').files[0]].filter(Boolean);
+ if(!files.length){status.textContent='Add at least one photograph first.';return}
+ status.textContent='Automatically reading your photograph…';
+ try{
+  const results=[];const ocrProblems=[];
+  for(let i=0;i<files.length;i++){
+   status.textContent=`Reading photo ${i+1} of ${files.length}…`;
+   if(window.Tesseract){try{const out=await withDeadline(Tesseract.recognize(files[i],'eng'),18000,'OCR');results.push(out.data.text||'')}catch(ocrError){results.push('');ocrProblems.push('Photo '+(i+1)+': '+ocrError.message)}}else {results.push('');ocrProblems.push('OCR library unavailable (network or browser restriction)')};
+  }
+  if(arguments.length&&arguments[0]!==scanSequence)return;
+  const text=results.join(' ').toUpperCase().replace(/\s+/g,' ');
+  const years=[...text.matchAll(/\b(1[789]\d{2}|20[0-2]\d)\b/g)].map(m=>m[0]);
+  const year=years[0]||'';
+  const currency=/FEDERAL RESERVE|UNITED STATES NOTE|SILVER CERTIFICATE|FEDERAL RESERVE NOTE|SECRETARY OF THE TREASURY|SERIES\s+(?:20|19)\d{2}/.test(text);
+  const defs=currency?[[/ONE HUNDRED DOLLARS|100 DOLLARS/,'$100 note'],[/FIFTY DOLLARS|50 DOLLARS/,'$50 note'],[/TWENTY DOLLARS|20 DOLLARS/,'$20 note'],[/TEN DOLLARS|10 DOLLARS/,'$10 note'],[/FIVE DOLLARS|5 DOLLARS/,'$5 note'],[/TWO DOLLARS|2 DOLLARS/,'$2 note'],[/ONE DOLLAR|1 DOLLAR/,'$1 note']]:[[/HALF DOLLAR|50 CENTS/,'Half dollar'],[/QUARTER DOLLAR/,'Quarter'],[/ONE DIME|10 CENTS/,'Dime'],[/FIVE CENTS/,'Nickel'],[/ONE CENT|1 CENT/,'Cent'],[/ONE DOLLAR|\bDOLLAR\b/,'Dollar']];
+  let denomination='';for(const [rx,n] of defs){if(rx.test(text)){denomination=n;break}}
+  let mint='';let mintNote='Mintmark not reliably identifiable from general OCR; please inspect manually.';
+  // OCR alone cannot safely distinguish a mintmark from surrounding lettering.
+  if(year)$('year').value=year;
+  if(text.trim())$('type').value=currency?'Paper currency':'Coin';
+  if(denomination||year)$('itemName').value=[year,denomination|| (currency?'U.S. banknote':'U.S. coin')].filter(Boolean).join(' ')+(currency?' (verify series)':'');
+  const serials=currency?[...text.matchAll(/\b[A-Z]?\d{8}[A-Z]?\b/g)].map(m=>m[0]):[];
+  const note=`Photo OCR draft (not authenticated). Recognized text: ${text.slice(0,700)||'none'}. ${mintNote}`+(ocrProblems.length?' OCR diagnostics: '+ocrProblems.join('; ')+'.':'')+(serials.length?' Possible serial: '+serials.join(', '):'');
+  $('notes').value=note;
+  status.textContent=`OCR finished. Loading free visual model for design matching (first download may be large)…`;
+  try{
+   const image=$('frontPreview').style.display==='block'?$('frontPreview').src:$('backPreview').src;
+   const guesses=await withDeadline(visualGuess(image),60000,'Visual model');
+   if(arguments.length&&arguments[0]!==scanSequence)return;
+   const top=guesses[0];
+   if(top){
+    const design=top.name.replace(/^a /,'');
+    const isNote=/banknote|paper currency/.test(design);
+    // CLIP similarity is not a calibrated identification probability.
+    if(!denomination && top.score>=0.24){$('itemName').value=[year,design].filter(Boolean).join(' ');$('type').value=isNote?'Paper currency':'Coin'}
+    if(top.score>=0.24 && !currency && year && !COIN_REFERENCE.some(r=>r.rx.test($('itemName').value))){$('itemName').value=year+' '+design;}
+    const candidates=guesses.map(g=>g.name+' (similarity '+g.score.toFixed(2)+')').join('; ');
+    $('notes').value=note+' Visual model candidates (NOT verified identifications): '+candidates+'.';
+    status.textContent='Automatic photo analysis complete. Suggested design: '+design+'. '+(year?'Year read: '+year+'. ':'')+'The image score is relative similarity, not certainty. No error, mintmark, grade, or price is authenticated.';
+   }else status.textContent='OCR complete; visual model returned no candidates. Saved with uncertain identification.';
+  }catch(visionError){
+   $('notes').value=note+' Visual recognition unavailable: '+(visionError?.message||String(visionError));
+   status.textContent='Visual identification unavailable: '+(visionError?.message||String(visionError))+'. Your photos are saved; opening My Collection.';
+  }
+ }catch(err){$('notes').value='Identification failed: '+(err?.message||String(err))+'. Photos preserved for later review.';status.textContent='Automatic reading failed: '+(err?.message||String(err))+'. Photos saved; opening collection.'}
+ finally{}
+}
+function exportData(){const blob=new Blob([JSON.stringify({app:'NumiPrism',version:'1.2',exported:new Date().toISOString(),items},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='NumiPrism-collection-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}render();
+</script></body></html>
